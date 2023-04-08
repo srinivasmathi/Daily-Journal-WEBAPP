@@ -11,17 +11,27 @@ require('dotenv').config()
 
 const start = async function(){
   await mongoose.connect(process.env.connection_string);
+
+  let p = Post.find({}).exec();
+
+  const postSchema = {
+   title: String,
+   kebabTitle : String,
+   data: String
+  };
+
+  const Post = mongoose.model("Post", postSchema);
+
+  listOfPosts = [];
+  p.then(function(posts){
+    posts.forEach(function(post){
+      listOfPosts.unshift(post);
+    })
+  });
+
 }
 
 start().catch(err => console.log(err));
-
-const postSchema = {
- title: String,
- kebabTitle : String,
- data: String
-};
-
-const Post = mongoose.model("Post", postSchema);
 
 // const startingContent = {
 //   title : "Lorem Ipsum",
@@ -46,15 +56,6 @@ let totPages =0;
 //
 //  });
 //  post.save();
-
-let p = Post.find({}).exec();
-
-listOfPosts = [];
-p.then(function(posts){
-  posts.forEach(function(post){
-    listOfPosts.unshift(post);
-  })
-});
 
 app.get("/",function(req,res){
   pageNo = 1
