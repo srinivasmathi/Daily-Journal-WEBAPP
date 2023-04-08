@@ -9,7 +9,11 @@ app.use(express.static('public'))
 app.set('view engine','ejs')
 require('dotenv').config()
 
-mongoose.connect(process.env.connection_string, {useNewUrlParser: true});
+try {
+  mongoose.connect(process.env.connection_string, {useNewUrlParser: true});
+} catch (error) {
+  handleError(error);
+}
 
 const postSchema = {
  title: String,
