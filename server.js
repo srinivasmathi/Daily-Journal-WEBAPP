@@ -9,11 +9,10 @@ app.use(express.static('public'))
 app.set('view engine','ejs')
 require('dotenv').config()
 
-try {
-  mongoose.connect(process.env.connection_string);
-} catch (error) {
-  handleError(error);
+const start = async function(){
+  await mongoose.connect(process.env.connection_string);
 }
+start();
 
 const postSchema = {
  title: String,
