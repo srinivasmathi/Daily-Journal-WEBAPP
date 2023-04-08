@@ -1,0 +1,37 @@
+
+<%- include('partials/header') -%>
+
+  <div class="home">
+    <div class="container">
+      <div class="row">
+        <% list.forEach(function(item){ %>
+          <div class="col-lg-6 mb-5">
+            <div class="card">
+              <h2 class="card-title mb-5"><%= item.title %></h2>
+              <p class="card-text"><%= item.data[0].split(' ').slice(0,40).join(' ') %></p>
+              <a class="btn btn-outline-dark mt-4" href=<%= "/posts/"+item.kebabTitle %>>Continue Reading <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+    <nav class="pagesNav">
+      <ul class="pagination">
+        <% if(pageNo > 1){ %>
+          <li class="page-item"><a class="page-link" href=<%= "/home/"+(parseInt(pageNo)-1) %>>Prev</a></li>
+        <% }else{ %>
+          <li class="page-item disabled"><a class="page-link" href="#">Prev</a></li>
+        <% } %>
+        <% for(var i=1;i<=totPages;i++){ %>
+          <li class="page-item"><a class="page-link" href=<%= "/home/"+i %>><%= i %></a></li>
+        <% } %>
+        <% if(pageNo < totPages){ %>
+          <li class="page-item"><a class="page-link" href=<%= "/home/"+(parseInt(pageNo)+1) %>>Next</a></li>
+        <% }else{ %>
+          <li class="page-item disabled"><a class="page-link" href='#'>Next</a></li>
+        <% } %>
+      </ul>
+    </nav>
+  </div>
+
+<%- include('partials/footer') -%>
