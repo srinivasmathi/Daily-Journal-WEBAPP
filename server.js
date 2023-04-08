@@ -10,7 +10,7 @@ app.set('view engine','ejs')
 require('dotenv').config()
 
 try {
-  mongoose.connect(process.env.connection_string, {useNewUrlParser: true});
+  mongoose.connect(process.env.connection_string);
 } catch (error) {
   handleError(error);
 }
