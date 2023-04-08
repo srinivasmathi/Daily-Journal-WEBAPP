@@ -12,7 +12,8 @@ require('dotenv').config()
 const start = async function(){
   await mongoose.connect(process.env.connection_string);
 }
-start();
+
+start().catch(err => console.log(err));
 
 const postSchema = {
  title: String,
