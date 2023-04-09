@@ -9,21 +9,27 @@ app.use(express.static('public'))
 app.set('view engine','ejs')
 require('dotenv').config()
 
+let listOfPosts = [];
+
+const postSchema = {
+ title: String,
+ kebabTitle : String,
+ data: String
+};
+
 const start = async function(){
-  await mongoose.connect(process.env.connection_string);
+  try{
+    await mongoose.connect(process.env.connection_string);
+  }catch(err){
+    console.log(err);
+  }
 
-  let p = Post.find({}).exec();
 
-  const postSchema = {
-   title: String,
-   kebabTitle : String,
-   data: String
-  };
+  const Post = await mongoose.model("Post", postSchema);
 
-  const Post = mongoose.model("Post", postSchema);
+  let p = Promise.resolve(await Post.find({}).exec());
 
-  listOfPosts = [];
-  p.then(function(posts){
+  await p.then(function(posts){
     posts.forEach(function(post){
       listOfPosts.unshift(post);
     })
@@ -105,6 +111,9 @@ app.post("/compose",function(req,res){
     kebabTitle : _.kebabCase(title),
     data : postData
   };
+
+  const Post = mongoose.model("Post", postSchema);
+
   const post = new Post(data);
 
   post.save();
