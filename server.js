@@ -10,12 +10,15 @@ app.set('view engine','ejs')
 require('dotenv').config()
 
 let listOfPosts = [];
+let n = 0;
 
 const postSchema = {
  title: String,
  kebabTitle : String,
  data: String
 };
+
+let Post = 0;
 
 const start = async function(){
   try{
@@ -25,7 +28,7 @@ const start = async function(){
   }
 
 
-  const Post = await mongoose.model("Post", postSchema);
+  Post = await mongoose.model("Post", postSchema);
 
   let p = Promise.resolve(await Post.find({}).exec());
 
@@ -36,8 +39,6 @@ const start = async function(){
   });
 
 }
-
-start().catch(err => console.log(err));
 
 // const startingContent = {
 //   title : "Lorem Ipsum",
@@ -63,10 +64,14 @@ let totPages =0;
 //  });
 //  post.save();
 
-app.get("/",function(req,res){
+app.get("/",async function(req,res){
   pageNo = 1
+  if(n == 0){
+    await start().catch(err => console.log(err));
+    n++;
+  }
   totPages = Math.ceil(listOfPosts.length/4)
-  res.render("home",{list:listOfPosts.slice(0,4),pageNo:pageNo,totPages:totPages})
+  await res.render("home",{list:listOfPosts.slice(0,4),pageNo:pageNo,totPages:totPages})
 })
 
 app.get("/home/:pageNo",function(req,res){
@@ -111,8 +116,6 @@ app.post("/compose",function(req,res){
     kebabTitle : _.kebabCase(title),
     data : postData
   };
-
-  const Post = mongoose.model("Post", postSchema);
 
   const post = new Post(data);
 
