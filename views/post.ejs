@@ -1,10 +1,11 @@
 <%- include('partials/header') -%>
 
-  <h1><%= item.title %></h1>
+  <h1><%= item.title %></h1><br>
   <% const paras = item.data.split("\r\n") %>
 
-  <% paras.forEach(function(para){ %>
+  <% paras.forEach(function(para){ %><br>
     <p><%= para  %></p>
   <% }) %>
+  <br>
 
 <%- include('partials/footer') -%>
