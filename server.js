@@ -24,8 +24,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-let listOfPosts = [];
-
 const postSchema = {
  title: String,
  kebabTitle : String,
@@ -36,7 +34,7 @@ let Post;
 let postCount = 0;
 let pageNo = 0;
 const pageSize = 4;
-let totPages =0;
+let totPages = 0;
 let skipAmount = 0;
 
 //connection to the database
@@ -48,8 +46,8 @@ async function start(){
 
     await mongoose.connect(process.env.connection_string);
     Post = await mongoose.model("Post", postSchema);
-    postCount = await Post.countDocuments();
-
+    postCount = await Post.countDocuments({});
+    console.log(postCount);
   }catch(err){
     console.log(err);
   }
@@ -73,9 +71,10 @@ app.get("/home",async (req,res)=>{
 
   if(req.isAuthenticated()){
     pageNo = 1
+    postCount = await Post.countDocuments({});
     totPages = Math.ceil(postCount/pageSize);
     skipAmount = (pageNo - 1) * pageSize;
-    posts = await Post.find({}).skip(skipAmount).limit(pageSize).exec();
+    posts = await Post.find({}).sort({_id : -1}).skip(skipAmount).limit(pageSize).exec();
     res.render("home",{list:posts,pageNo:pageNo,totPages:totPages})
   }else{
     res.redirect('/');
@@ -98,9 +97,10 @@ app.get("/register",(req,res)=>{
 app.get("/home/:pageNo",async function(req,res){
   if(req.isAuthenticated()){
     pageNo = req.params.pageNo;
+    postCount = await Post.countDocuments({});
     totPages = Math.ceil(postCount/pageSize);
     skipAmount = (pageNo - 1) * pageSize;
-    const posts = await Post.find({}).skip(skipAmount).limit(pageSize).exec();
+    const posts = await Post.find({}).sort({_id : -1}).skip(skipAmount).limit(pageSize).exec();
 
     res.render('home',{list:posts,pageNo:pageNo,totPages:totPages})
 
@@ -151,8 +151,6 @@ app.post("/compose",function(req,res){
   const title = req.body.postTitle;
   const postData = req.body.postData;
 
-  console.log(postData.split('\r\n'));
-
   const data = {
     title : title,
     kebabTitle : _.kebabCase(title),
@@ -162,9 +160,8 @@ app.post("/compose",function(req,res){
   const post = new Post(data);
 
   post.save();
-  listOfPosts.unshift(data);
 
-  res.redirect("/");
+  res.redirect("/home");
 })
 
 //------------------------google authentication routes----------------------------------------//
