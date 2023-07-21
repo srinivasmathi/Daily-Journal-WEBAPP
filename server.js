@@ -73,7 +73,7 @@ let totPages =0;
 //  post.save();
 
 app.get("/",async (req,res)=>{
-  await start().catch(err => console.log(err))
+  await start().catch(err => console.log(err));
   const errorMessage = req.query.error;
   res.render('login',{ errorMessage });
 })
@@ -188,3 +188,7 @@ app.get("/auth/facebook/res",
 
 
 app.use("/",localAuthRouter);
+
+app.listen(process.env.PORT || 3000,() => {
+  console.log("server started to the port 3000");
+});
