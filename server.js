@@ -32,6 +32,13 @@ const postSchema = {
  data: String
 };
 
+start()
+  .then(()=>{
+    app.listen(process.env.PORT || 3000,function(){
+      console.log("server started to the port 3000");
+    })
+  })
+  .catch(err => console.log(err))
 
 let Post = 0;
 
@@ -57,7 +64,6 @@ async function start(){
   }
 }
 
-start().catch(err => console.log(err))
 
 const contactContent = "Want to get in touch? Fill out the form below to send me a message and I will get back to you as soon as possible!"
 const aboutContent = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nec euismod mauris. Proin porta nisi scelerisque, scelerisque nulla non, fermentum lorem. Integer porttitor in metus sit amet sollicitudin. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas facilisis, tortor at viverra efficitur, orci dui cursus dui, sit amet porta felis eros non est. Nullam mollis luctus turpis, a luctus urna venenatis ac. Praesent ut lectus tincidunt, rhoncus ipsum sed, efficitur orci. Donec vitae arcu eget neque dignissim vestibulum. Duis egestas congue neque, a faucibus justo ornare a.Morbi vel auctor libero, quis finibus libero. Nam ut orci varius, dignissim orci a, finibus lacus. Quisque facilisis diam eros, vitae consectetur sapien convallis ac. Morbi ut dolor vel nunc lacinia consequat sed tempus urna. Donec non libero nec massa egestas placerat. Etiam ac erat eget tortor dapibus iaculis eget ac sapien. Nulla sit amet ultrices lectus, a interdum nibh. Curabitur ultricies mauris sit amet risus facilisis vestibulum. Nam condimentum eu mauris sit amet venenatis. Ut turpis dui, sagittis et dui ac, bibendum lobortis nisi. Sed pellentesque nisl vitae diam faucibus tempor. Nunc commodo nibh erat, vel pretium augue tincidunt a.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nec euismod mauris. Proin porta nisi scelerisque, scelerisque nulla non, fermentum lorem. Integer porttitor in metus sit amet sollicitudin. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas facilisis, tortor at viverra efficitur, orci dui cursus dui, sit amet porta felis eros non est. Nullam mollis luctus turpis, a luctus urna venenatis ac. Praesent ut lectus tincidunt, rhoncus ipsum sed, efficitur orci. Donec vitae arcu eget neque dignissim vestibulum. Duis egestas congue neque, a faucibus justo ornare a.Morbi vel auctor libero, quis finibus libero. Nam ut orci varius, dignissim orci a, finibus lacus. Quisque facilisis diam eros, vitae consectetur sapien convallis ac. Morbi ut dolor vel nunc lacinia consequat sed tempus urna. Donec non libero nec massa egestas placerat. Etiam ac erat eget tortor dapibus iaculis eget ac sapien. Nulla sit amet ultrices lectus, a interdum nibh. Curabitur ultricies mauris sit amet risus facilisis vestibulum. Nam condimentum eu mauris sit amet venenatis. Ut turpis dui, sagittis et dui ac, bibendum lobortis nisi. Sed pellentesque nisl vitae diam faucibus tempor. Nunc commodo nibh erat, vel pretium augue tincidunt a.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nec euismod mauris. Proin porta nisi scelerisque, scelerisque nulla non, fermentum lorem. Integer porttitor in metus sit amet sollicitudin. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas facilisis, tortor at viverra efficitur, orci dui cursus dui, sit amet porta felis eros non est. Nullam mollis luctus turpis, a luctus urna venenatis ac. Praesent ut lectus tincidunt, rhoncus ipsum sed, efficitur orci. Donec vitae arcu eget neque dignissim vestibulum. Duis egestas congue neque, a faucibus justo ornare a.Morbi vel auctor libero, quis finibus libero. Nam ut orci varius, dignissim orci a, finibus lacus. Quisque facilisis diam eros, vitae consectetur sapien convallis ac. Morbi ut dolor vel nunc lacinia consequat sed tempus urna. Donec non libero nec massa egestas placerat. Etiam ac erat eget tortor dapibus iaculis eget ac sapien. Nulla sit amet ultrices lectus, a interdum nibh. Curabitur ultricies mauris sit amet risus facilisis vestibulum. Nam condimentum eu mauris sit amet venenatis. Ut turpis dui, sagittis et dui ac, bibendum lobortis nisi. Sed pellentesque nisl vitae diam faucibus tempor. Nunc commodo nibh erat, vel pretium augue tincidunt a.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nec euismod mauris. Proin porta nisi scelerisque, scelerisque nulla non, fermentum lorem. Integer porttitor in metus sit amet sollicitudin. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas facilisis, tortor at viverra efficitur, orci dui cursus dui, sit amet porta felis eros non est. Nullam mollis luctus turpis, a luctus urna venenatis ac. Praesent ut lectus tincidunt, rhoncus ipsum sed, efficitur orci. Donec vitae arcu eget neque dignissim vestibulum. Duis egestas congue neque, a faucibus justo ornare a.Morbi vel auctor libero, quis finibus libero. Nam ut orci varius, dignissim orci a, finibus lacus. Quisque facilisis diam eros, vitae consectetur sapien convallis ac. Morbi ut dolor vel nunc lacinia consequat sed tempus urna. Donec non libero nec massa egestas placerat. Etiam ac erat eget tortor dapibus iaculis eget ac sapien. Nulla sit amet ultrices lectus, a interdum nibh. Curabitur ultricies mauris sit amet risus facilisis vestibulum. Nam condimentum eu mauris sit amet venenatis. Ut turpis dui, sagittis et dui ac, bibendum lobortis nisi. Sed pellentesque nisl vitae diam faucibus tempor. Nunc commodo nibh erat, vel pretium augue tincidunt a."
@@ -186,10 +192,6 @@ app.get("/auth/facebook/res",
     passport.authenticate('facebook',{successRedirect : "/home",failureRedirect : "/?error=try%20again"}),
 )
 //-----------------------------------------------------------------------------------------//
-
-app.listen(process.env.PORT || 3000,function(){
-  console.log("server started to the port 3000");
-})
 
 
 app.use("/",localAuthRouter);
