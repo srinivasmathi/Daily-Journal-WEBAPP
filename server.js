@@ -18,7 +18,10 @@ app.use(express.static('public'))
 app.use(session({
   secret : process.env.SECRET,
   resave : false,
-  saveUninitialized : false
+  saveUninitialized : false,
+  cookie : {
+    maxAge : 300000
+  }
 }))
 app.use(passport.initialize());
 app.use(passport.session());
