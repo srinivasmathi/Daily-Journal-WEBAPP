@@ -32,28 +32,6 @@ const postSchema = {
  data: String
 };
 
-start()
-  .then(()=>{
-
-    app.listen(process.env.PORT || 3000,function(){
-      console.log("server started to the port 3000");
-    })
-
-    app.get("/home",(req,res)=>{
-
-      if(req.isAuthenticated()){
-        pageNo = 1
-        totPages = Math.ceil(listOfPosts.length/4)
-        res.render("home",{list:listOfPosts.slice(0,4),pageNo:pageNo,totPages:totPages})
-      }else{
-        res.redirect('/');
-      }
-    
-    })
-
-  })
-  .catch(err => console.log(err))
-
 let Post = 0;
 
 //connection to the database
@@ -76,7 +54,6 @@ async function start(){
   }catch(err){
     console.log(err);
   }
-
 }
 
 
@@ -95,13 +72,26 @@ let totPages =0;
 //  });
 //  post.save();
 
-app.get("/",(req,res)=>{
+app.get("/",async (req,res)=>{
+  await start().catch(err => console.log(err))
   const errorMessage = req.query.error;
   res.render('login',{ errorMessage });
 })
 
 app.get("/register",(req,res)=>{
   res.render('register');
+})
+
+app.get("/home",(req,res)=>{
+
+  if(req.isAuthenticated()){
+    pageNo = 1
+    totPages = Math.ceil(listOfPosts.length/4)
+    res.render("home",{list:listOfPosts.slice(0,4),pageNo:pageNo,totPages:totPages})
+  }else{
+    res.redirect('/');
+  }
+
 })
 
 app.get("/home/:pageNo",function(req,res){
