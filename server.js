@@ -35,7 +35,7 @@ const postSchema = {
 let Post;
 
 //connection to the database
-await start().catch(err => console.log(err));
+start().catch(err => console.log(err));
 
 async function start(){
 
@@ -185,9 +185,10 @@ app.get("/auth/facebook/res",
 )
 //-----------------------------------------------------------------------------------------//
 
+app.use("/",localAuthRouter);
+
 app.listen(process.env.PORT || 3000,() => {
   console.log("server started to the port 3000");
 });
 
-app.use("/",localAuthRouter);
 
