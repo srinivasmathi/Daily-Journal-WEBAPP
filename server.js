@@ -83,14 +83,20 @@ app.get("/home",async (req,res)=>{
 })
 
 app.get("/",async (req,res)=>{
-
-  const errorMessage = req.query.error;
-  res.render('login',{ errorMessage });
-
+  if(req.isAuthenticated()){
+    res.redirect("/home");
+  }else{
+    const errorMessage = req.query.error;
+    res.render('login',{ errorMessage });
+  }
 })
 
 app.get("/register",(req,res)=>{
-  res.render('register');
+  if(req.isAuthenticated()){
+    res.redirect("/home");
+  }else{
+    res.render('register');
+  }
 })
 
 
@@ -101,7 +107,6 @@ app.get("/home/:pageNo",async function(req,res){
     totPages = Math.ceil(postCount/pageSize);
     skipAmount = (pageNo - 1) * pageSize;
     const posts = await Post.find({}).sort({_id : -1}).skip(skipAmount).limit(pageSize).exec();
-
     res.render('home',{list:posts,pageNo:pageNo,totPages:totPages})
 
   }else{
