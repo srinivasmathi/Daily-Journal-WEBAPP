@@ -34,9 +34,23 @@ const postSchema = {
 
 start()
   .then(()=>{
+
     app.listen(process.env.PORT || 3000,function(){
       console.log("server started to the port 3000");
     })
+
+    app.get("/home",(req,res)=>{
+
+      if(req.isAuthenticated()){
+        pageNo = 1
+        totPages = Math.ceil(listOfPosts.length/4)
+        res.render("home",{list:listOfPosts.slice(0,4),pageNo:pageNo,totPages:totPages})
+      }else{
+        res.redirect('/');
+      }
+    
+    })
+
   })
   .catch(err => console.log(err))
 
@@ -62,6 +76,7 @@ async function start(){
   }catch(err){
     console.log(err);
   }
+
 }
 
 
@@ -87,18 +102,6 @@ app.get("/",(req,res)=>{
 
 app.get("/register",(req,res)=>{
   res.render('register');
-})
-
-app.get("/home",(req,res)=>{
-
-  if(req.isAuthenticated()){
-    pageNo = 1
-    totPages = Math.ceil(listOfPosts.length/4)
-    res.render("home",{list:listOfPosts.slice(0,4),pageNo:pageNo,totPages:totPages})
-  }else{
-    res.redirect('/');
-  }
-
 })
 
 app.get("/home/:pageNo",function(req,res){
