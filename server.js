@@ -44,7 +44,7 @@ async function setupServer(){
 
     if(req.isAuthenticated()){
       pageNo = 1
-      totPages = Math.ceil(listOfPosts.length/4)
+      totPages = Math.ceil(listOfPosts.length/4);
       res.render("home",{list:listOfPosts.slice(0,4),pageNo:pageNo,totPages:totPages})
     }else{
       res.redirect('/');
@@ -67,7 +67,7 @@ async function start(){
     Post = await mongoose.model("Post", postSchema);
 
     let p = await Post.find({}).exec();
-
+    console.log(p);
     await p.then(function(posts){
 
       posts.forEach(function(post){
