@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16x16.png">
+    <link rel="manifest" href="icons/site.webmanifest">
+    <link rel="stylesheet" href="css/loginStyles.css">
+    <title>Register form</title>
+</head>
+<body>
+    <div class="register-container background">
+        <h1>Create an Account</h1>
+        <form method="post" action="/register" id="form">
+            <input type="text" placeholder="Username" name="username">
+            <div class="email-wrapper">
+                <input id="email" type="text" placeholder="Email ID" oninput="checkEMail()" name="email">
+                <% if(typeof errorMessage !== 'undefined') { %>
+                    <p id="error-msg" style="display : block"><%= errorMessage %></p>
+                <% } %>
+                <p id="email-msg"></p>
+                <i id="check1" class="fa-solid fa-check" style="color: #3d8361;"></i>
+            </div>
+            <div class="password-wrapper">
+                <input id="password" type="password" placeholder="Password" oninput="validatePassword()" name="password">
+                <button type="button" onclick="togglePasswordVisibility()">
+                    <i id="password-button" class="toggle-button fa-solid fa-eye" style="color: gray;"></i>
+                </button>
+            </div>
+            <p id="pw-validation-msg"></p>
+            <div class="confirm-password-wrapper">
+                <input id="confirm-password" type="password" placeholder="Confirm Password" oninput="checkPassword()">
+                <p id="password-msg"></p>
+                <i id="check2" class="fa-solid fa-check" style="color: #3d8361;"></i>
+            </div>
+            <button id="submit-button" class="register-button" type="submit" disabled>Register</button>
+            <p id="filled"></p>
+            <p>----------------or--------------</p>
+            <button id="google-button" type="button" class="google-button"><i class="fa-brands fa-google"></i> Sign up with Google</button>
+            <button id="facebook-button" type="button" class="facebook-button"><i class="fa-brands fa-facebook-f"></i> Sign up with Facebook</i></button>
+            <p>Already have an Account?<a href="/">Sign in</a></p>
+        </form>
+    </div>
+    <script src="index.js"></script>
+</body>
+</html>
