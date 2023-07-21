@@ -32,14 +32,38 @@ const postSchema = {
  data: String
 };
 
-let Post = 0;
+let Post;
 
 //connection to the database
+
+async function setupServer(){
+
+  await start().catch(err => console.log(err));
+
+  app.get("/home",(req,res)=>{
+
+    if(req.isAuthenticated()){
+      pageNo = 1
+      totPages = Math.ceil(listOfPosts.length/4)
+      res.render("home",{list:listOfPosts.slice(0,4),pageNo:pageNo,totPages:totPages})
+    }else{
+      res.redirect('/');
+    }
+  
+  })
+
+  app.listen(process.env.PORT || 3000,() => {
+    console.log("server started to the port 3000");
+  });
+
+}
+
+setupServer().catch(err => console.log(err));
 
 async function start(){
 
   try {
-    await mongoose.connect(process.env.connection_string);
+
     Post = await mongoose.model("Post", postSchema);
 
     let p = await Post.find({}).exec();
@@ -73,26 +97,16 @@ let totPages =0;
 //  post.save();
 
 app.get("/",async (req,res)=>{
-  await start().catch(err => console.log(err));
+
   const errorMessage = req.query.error;
   res.render('login',{ errorMessage });
+
 })
 
 app.get("/register",(req,res)=>{
   res.render('register');
 })
 
-app.get("/home",(req,res)=>{
-
-  if(req.isAuthenticated()){
-    pageNo = 1
-    totPages = Math.ceil(listOfPosts.length/4)
-    res.render("home",{list:listOfPosts.slice(0,4),pageNo:pageNo,totPages:totPages})
-  }else{
-    res.redirect('/');
-  }
-
-})
 
 app.get("/home/:pageNo",function(req,res){
   if(req.isAuthenticated()){
@@ -189,6 +203,3 @@ app.get("/auth/facebook/res",
 
 app.use("/",localAuthRouter);
 
-app.listen(process.env.PORT || 3000,() => {
-  console.log("server started to the port 3000");
-});
