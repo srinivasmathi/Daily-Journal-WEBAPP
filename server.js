@@ -41,9 +41,9 @@ async function start(){
 
   try {
     await mongoose.connect(process.env.connection_string);
-    Post = mongoose.model("Post", postSchema);
+    Post = await mongoose.model("Post", postSchema);
 
-    let p = Promise.resolve(Post.find({}).exec());
+    let p = await Post.find({}).exec();
 
     await p.then(function(posts){
 
