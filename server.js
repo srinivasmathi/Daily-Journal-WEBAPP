@@ -33,6 +33,11 @@ const postSchema = {
 };
 
 let Post;
+let postCount = 0;
+let pageNo = 0;
+const pageSize = 4;
+let totPages =0;
+let skipAmount = 0;
 
 //connection to the database
 start().catch(err => console.log(err));
@@ -40,15 +45,10 @@ start().catch(err => console.log(err));
 async function start(){
 
   try {
+
     await mongoose.connect(process.env.connection_string);
     Post = await mongoose.model("Post", postSchema);
-
-    let p = Promise.resolve(await Post.find({}).exec());
-    p.then((posts)=>{
-      posts.forEach(function(post){
-      listOfPosts.unshift(post);
-    })
-  });
+    postCount = await Post.countDocuments();
 
   }catch(err){
     console.log(err);
@@ -59,8 +59,6 @@ async function start(){
 const contactContent = "Want to get in touch? Fill out the form below to send me a message and I will get back to you as soon as possible!"
 const aboutContent = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nec euismod mauris. Proin porta nisi scelerisque, scelerisque nulla non, fermentum lorem. Integer porttitor in metus sit amet sollicitudin. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas facilisis, tortor at viverra efficitur, orci dui cursus dui, sit amet porta felis eros non est. Nullam mollis luctus turpis, a luctus urna venenatis ac. Praesent ut lectus tincidunt, rhoncus ipsum sed, efficitur orci. Donec vitae arcu eget neque dignissim vestibulum. Duis egestas congue neque, a faucibus justo ornare a.Morbi vel auctor libero, quis finibus libero. Nam ut orci varius, dignissim orci a, finibus lacus. Quisque facilisis diam eros, vitae consectetur sapien convallis ac. Morbi ut dolor vel nunc lacinia consequat sed tempus urna. Donec non libero nec massa egestas placerat. Etiam ac erat eget tortor dapibus iaculis eget ac sapien. Nulla sit amet ultrices lectus, a interdum nibh. Curabitur ultricies mauris sit amet risus facilisis vestibulum. Nam condimentum eu mauris sit amet venenatis. Ut turpis dui, sagittis et dui ac, bibendum lobortis nisi. Sed pellentesque nisl vitae diam faucibus tempor. Nunc commodo nibh erat, vel pretium augue tincidunt a.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nec euismod mauris. Proin porta nisi scelerisque, scelerisque nulla non, fermentum lorem. Integer porttitor in metus sit amet sollicitudin. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas facilisis, tortor at viverra efficitur, orci dui cursus dui, sit amet porta felis eros non est. Nullam mollis luctus turpis, a luctus urna venenatis ac. Praesent ut lectus tincidunt, rhoncus ipsum sed, efficitur orci. Donec vitae arcu eget neque dignissim vestibulum. Duis egestas congue neque, a faucibus justo ornare a.Morbi vel auctor libero, quis finibus libero. Nam ut orci varius, dignissim orci a, finibus lacus. Quisque facilisis diam eros, vitae consectetur sapien convallis ac. Morbi ut dolor vel nunc lacinia consequat sed tempus urna. Donec non libero nec massa egestas placerat. Etiam ac erat eget tortor dapibus iaculis eget ac sapien. Nulla sit amet ultrices lectus, a interdum nibh. Curabitur ultricies mauris sit amet risus facilisis vestibulum. Nam condimentum eu mauris sit amet venenatis. Ut turpis dui, sagittis et dui ac, bibendum lobortis nisi. Sed pellentesque nisl vitae diam faucibus tempor. Nunc commodo nibh erat, vel pretium augue tincidunt a.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nec euismod mauris. Proin porta nisi scelerisque, scelerisque nulla non, fermentum lorem. Integer porttitor in metus sit amet sollicitudin. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas facilisis, tortor at viverra efficitur, orci dui cursus dui, sit amet porta felis eros non est. Nullam mollis luctus turpis, a luctus urna venenatis ac. Praesent ut lectus tincidunt, rhoncus ipsum sed, efficitur orci. Donec vitae arcu eget neque dignissim vestibulum. Duis egestas congue neque, a faucibus justo ornare a.Morbi vel auctor libero, quis finibus libero. Nam ut orci varius, dignissim orci a, finibus lacus. Quisque facilisis diam eros, vitae consectetur sapien convallis ac. Morbi ut dolor vel nunc lacinia consequat sed tempus urna. Donec non libero nec massa egestas placerat. Etiam ac erat eget tortor dapibus iaculis eget ac sapien. Nulla sit amet ultrices lectus, a interdum nibh. Curabitur ultricies mauris sit amet risus facilisis vestibulum. Nam condimentum eu mauris sit amet venenatis. Ut turpis dui, sagittis et dui ac, bibendum lobortis nisi. Sed pellentesque nisl vitae diam faucibus tempor. Nunc commodo nibh erat, vel pretium augue tincidunt a.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi nec euismod mauris. Proin porta nisi scelerisque, scelerisque nulla non, fermentum lorem. Integer porttitor in metus sit amet sollicitudin. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas facilisis, tortor at viverra efficitur, orci dui cursus dui, sit amet porta felis eros non est. Nullam mollis luctus turpis, a luctus urna venenatis ac. Praesent ut lectus tincidunt, rhoncus ipsum sed, efficitur orci. Donec vitae arcu eget neque dignissim vestibulum. Duis egestas congue neque, a faucibus justo ornare a.Morbi vel auctor libero, quis finibus libero. Nam ut orci varius, dignissim orci a, finibus lacus. Quisque facilisis diam eros, vitae consectetur sapien convallis ac. Morbi ut dolor vel nunc lacinia consequat sed tempus urna. Donec non libero nec massa egestas placerat. Etiam ac erat eget tortor dapibus iaculis eget ac sapien. Nulla sit amet ultrices lectus, a interdum nibh. Curabitur ultricies mauris sit amet risus facilisis vestibulum. Nam condimentum eu mauris sit amet venenatis. Ut turpis dui, sagittis et dui ac, bibendum lobortis nisi. Sed pellentesque nisl vitae diam faucibus tempor. Nunc commodo nibh erat, vel pretium augue tincidunt a."
 
-let pageNo = 0;
-let totPages =0;
 //Math.ceil(listOfPosts.length/4);
 
 // const post = new Post ({
@@ -71,12 +69,14 @@ let totPages =0;
 //  });
 //  post.save();
 
-app.get("/home",(req,res)=>{
+app.get("/home",async (req,res)=>{
 
   if(req.isAuthenticated()){
     pageNo = 1
-    totPages = Math.ceil(listOfPosts.length/4);
-    res.render("home",{list:listOfPosts.slice(0,4),pageNo:pageNo,totPages:totPages})
+    totPages = Math.ceil(postCount/pageSize);
+    skipAmount = (pageNo - 1) * pageSize;
+    posts = await Post.find({}).skip(skipAmount).limit(pageSize).exec();
+    res.render("home",{list:posts,pageNo:pageNo,totPages:totPages})
   }else{
     res.redirect('/');
   }
@@ -95,27 +95,28 @@ app.get("/register",(req,res)=>{
 })
 
 
-app.get("/home/:pageNo",function(req,res){
+app.get("/home/:pageNo",async function(req,res){
   if(req.isAuthenticated()){
-    pageNo = req.params.pageNo
-    totPages = Math.ceil(listOfPosts.length/4)
-    res.render('home',{list:listOfPosts.slice(((pageNo-1)*4),((pageNo-1)*4)+4),pageNo:pageNo,totPages:totPages})
+    pageNo = req.params.pageNo;
+    totPages = Math.ceil(postCount/pageSize);
+    skipAmount = (pageNo - 1) * pageSize;
+    const posts = await Post.find({}).skip(skipAmount).limit(pageSize).exec();
+
+    res.render('home',{list:posts,pageNo:pageNo,totPages:totPages})
+
   }else{
     res.redirect("/");
   }
 })
 
-app.get("/posts/:title",function(req,res){
+app.get("/posts/:title",async function(req,res){
 
   if(req.isAuthenticated()){
-    const tle = req.params.title
-    let post = 0;
-    listOfPosts.forEach(function(item){
-      if(item.kebabTitle == tle){
-        post = item;
-      }
-    })
-    res.render('post',{item:post});
+
+    const tle = req.params.title;
+    const post = await Post.find({kebabTitle : tle }).exec();
+    res.render('post',{item:post[0]});
+
   }else{
     res.redirect("/");
   }
