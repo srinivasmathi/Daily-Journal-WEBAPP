@@ -43,7 +43,7 @@ async function start(){
     await mongoose.connect(process.env.connection_string);
     Post = await mongoose.model("Post", postSchema);
 
-    let p = Promise.resolve(Post.find({}).exec());
+    let p = Promise.resolve(await Post.find({}).exec());
     p.then((posts)=>{
       posts.forEach(function(post){
       listOfPosts.unshift(post);
