@@ -7,25 +7,28 @@ Registered users can compose posts and it will be visible to all the other users
 
 tech stack : 
 
--> Implemented both open and local authentication using passport.js
+* Implemented both open and local authentication using passport.js
+* used EJS(Embedded Javascript Templating) for adding dynamic content to the application.
+* used MongoDB for the database. The database consists of two collections: one for storing posts and the other for storing user data.
+* The back-end Logic is implemented using Express.js.
+* Added bootstrap for responsiveness of the application.
+* Session will be created once the user is logged in and the session will be active until the browser is not closed.
 
--> used EJS(Embedded Javascript Templating) for adding dynamic content to the application.
+<br />
 
--> used MongoDB for the database. The database consists of two collections: one for storing posts and the other for storing user data.
-
--> The back-end Logic is implemented using Express.js.
-
--> Add bootstrap for responsiveness of the application.
-
-->Session will be created once the user is logged in and the session will be active until the browser is not closed.
-
-
-
-hosted on Cyclic.sh - https://daily-journal-srinivasmathi.cyclic.app/
-
+hosted on Cyclic.sh - https://daily-journal-srinivasmathi.cyclic.app/ <br />
 login page Impl - https://github.com/srinivasmathi/LogIn-signUp-Form/
 
+<br />
 
+Login Page:
+
+![image](https://github.com/srinivasmathi/Daily-Journal-WEBAPP/assets/82605661/ed36518c-4362-4c71-9af2-6cdd6e93a57f)
+
+
+Register Page:
+
+![image](https://github.com/srinivasmathi/Daily-Journal-WEBAPP/assets/82605661/3975d830-bb8b-4b55-9fe6-311d2637ad31)
 
 Home Page : 
 
