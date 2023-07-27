@@ -11,6 +11,9 @@
           <label for="postData">Post</label>
           <textarea name="postData" class="form-control" rows=10></textarea>
         </div>
+        <% if(typeof errorMessage !== 'undefined'){ %>
+          <p style="color: red;"><%= errorMessage %></p>
+        <% } %>
         <button type="submit" name="button" class="btn btn-dark" >Submit</button>
       </form>
     </div>

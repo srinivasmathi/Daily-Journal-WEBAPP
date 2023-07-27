@@ -48,9 +48,10 @@ async function start(){
   try {
 
     await mongoose.connect(process.env.connection_string);
-    Post = await mongoose.model("Post", postSchema);
-    postCount = await Post.countDocuments({});
+    await mongoose.model("Post", postSchema);
+    postCount = await mongoose.model('Post').countDocuments({});
     console.log(postCount);
+
   }catch(err){
     console.log(err);
   }
@@ -74,10 +75,10 @@ app.get("/home",async (req,res)=>{
 
   if(req.isAuthenticated()){
     pageNo = 1
-    postCount = await Post.countDocuments({});
+    postCount = await mongoose.model('Post').countDocuments({});
     totPages = Math.ceil(postCount/pageSize);
     skipAmount = (pageNo - 1) * pageSize;
-    posts = await Post.find({}).sort({_id : -1}).skip(skipAmount).limit(pageSize).exec();
+    posts = await mongoose.model('Post').find({}).sort({_id : -1}).skip(skipAmount).limit(pageSize).exec();
     res.render("home",{list:posts,pageNo:pageNo,totPages:totPages})
   }else{
     res.redirect('/');
@@ -106,10 +107,10 @@ app.get("/register",(req,res)=>{
 app.get("/home/:pageNo",async function(req,res){
   if(req.isAuthenticated()){
     pageNo = req.params.pageNo;
-    postCount = await Post.countDocuments({});
+    postCount = await mongoose.model('Post').countDocuments({});
     totPages = Math.ceil(postCount/pageSize);
     skipAmount = (pageNo - 1) * pageSize;
-    const posts = await Post.find({}).sort({_id : -1}).skip(skipAmount).limit(pageSize).exec();
+    const posts = await mongoose.model('Post').find({}).sort({_id : -1}).skip(skipAmount).limit(pageSize).exec();
     res.render('home',{list:posts,pageNo:pageNo,totPages:totPages})
 
   }else{
@@ -122,7 +123,7 @@ app.get("/posts/:title",async function(req,res){
   if(req.isAuthenticated()){
 
     const tle = req.params.title;
-    const post = await Post.find({kebabTitle : tle }).exec();
+    const post = await mongoose.model('Post').find({kebabTitle : tle }).exec();
     res.render('post',{item:post[0]});
 
   }else{
@@ -148,7 +149,7 @@ app.get("/about",function(req,res){
 
 app.get('/compose',function(req,res){
   if(req.isAuthenticated()){
-    res.render('compose')
+    res.render('compose');
   }else{
     res.redirect("/");
   }
@@ -159,17 +160,24 @@ app.post("/compose",function(req,res){
   const title = req.body.postTitle;
   const postData = req.body.postData;
 
-  const data = {
-    title : title,
-    kebabTitle : _.kebabCase(title),
-    data : postData
-  };
+  if(title === "" || postData === ""){
 
-  const post = new Post(data);
+    errorMessage = "Empty fields!";
+    res.render('compose',{ errorMessage });
 
-  post.save();
-
-  res.redirect("/home");
+  }else{
+    const data = {
+      title : title,
+      kebabTitle : _.kebabCase(title),
+      data : postData
+    };
+  
+    const post = new mongoose.model('Post')(data);
+  
+    post.save();
+  
+    res.redirect("/home");
+  }
 })
 
 //------------------------google authentication routes----------------------------------------//

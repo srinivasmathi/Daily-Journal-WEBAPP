@@ -32,33 +32,44 @@ router.post("/register",(req,res) => {
 });
 
 router.post("/",(req,res) => {
-    const user = new User({
-      email :req.body.email,
-      password:req.body.password
-    })
- 
-    req.login(user,(err) => {
- 
-    try{
-      if (err) { 
-        console.log(err);
-        const errorMessage = "Incorrect username or password";
-        res.render("login",{ errorMessage });
-       } else {
 
-        const authenticate  = passport.authenticate("local",{failureRedirect : "/?error=Invalid%20username%20or%20password"});
-        authenticate(req,res,function(){
-          res.redirect("/home");
-        })
-        
-       }
-    }catch(err){
-        console.log(err);
-        const errorMessage = "Incorrect username or password";
-        res.render("login",{ errorMessage });
+    email = req.body.email;
+    password = req.body.password;
+
+    if(email === "" || password === ""){
+      errorMessage = "Empty fields!";
+      res.render('login',{errorMessage});
+    }else{
+      
+      const user = new User({
+        email :req.body.email,
+        password:req.body.password
+      })
+   
+      req.login(user,(err) => {
+   
+      try{
+        if (err) { 
+          console.log(err);
+          const errorMessage = "Incorrect username or password";
+          res.render("login",{ errorMessage });
+         } else {
+  
+          const authenticate  = passport.authenticate("local",{failureRedirect : "/?error=Invalid%20username%20or%20password"});
+          authenticate(req,res,function(){
+            res.redirect("/home");
+          })
+          
+         }
+      }catch(err){
+          console.log(err);
+          const errorMessage = "Incorrect username or password";
+          res.render("login",{ errorMessage });
+      }
+       
+      });
     }
-     
-    });
+
 })
 router.get('/logout',(req, res) => {
   req.logout((err)=>{

@@ -9,7 +9,9 @@
             <div class="card">
               <h2 class="card-title mb-5"><%= item.title %></h2>
               <p class="card-text"><%= item.data.split(' ').slice(0,40).join(' ') %></p>
-              <a class="btn btn-outline-dark mt-4" href=<%= "/posts/"+item.kebabTitle %>>Continue Reading <i class="fa-solid fa-arrow-right"></i></a>
+              <div>
+                <a class="btn btn-outline-dark mt-4" href=<%= "/posts/"+item.kebabTitle %>>Continue Reading <i class="fa-solid fa-arrow-right"></i></a>
+              </div>
             </div>
           </div>
         <% }) %>
