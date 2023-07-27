@@ -74,15 +74,21 @@ const aboutContent = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. M
 //  });
 //  post.save();
 
-app.get("/home",async (req,res)=>{
+app.get("/home",async function(req,res){
 
   if(req.isAuthenticated()){
-    pageNo = 1
-    postCount = await mongoose.model('Post').countDocuments({});
-    totPages = Math.ceil(postCount/pageSize);
-    skipAmount = (pageNo - 1) * pageSize;
-    posts = await mongoose.model('Post').find({}).sort({_id : -1}).skip(skipAmount).limit(pageSize).exec();
+
+    try{
+      pageNo = 1
+      postCount = await mongoose.model('Post').countDocuments({});
+      totPages = Math.ceil(postCount/pageSize);
+      skipAmount = (pageNo - 1) * pageSize;
+      posts = await mongoose.model('Post').find({}).sort({_id : -1}).skip(skipAmount).limit(pageSize).exec();
     res.render("home",{list:posts,pageNo:pageNo,totPages:totPages})
+    }
+    catch(err){
+      res.redirect('/home');
+    }
   }else{
     res.redirect('/');
   }

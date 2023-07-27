@@ -9,9 +9,7 @@ const passportLocalMongoose = require('passport-local-mongoose');
 const { reduceRight } = require('lodash');
 
 async function main(){
-    await mongoose.connect(process.env.connection_string).catch((err)=>{
-        setTimeout(main,2000);
-    });
+    await mongoose.connect(process.env.connection_string);
 }
 main().catch(err=>console.log(err));
 
