@@ -49,7 +49,7 @@ async function start(){
 
     await mongoose.connect(process.env.connection_string);
     await mongoose.model("Post", postSchema);
-    postCount = await mongoose.model('Post').countDocuments({}).lean();
+    postCount = await mongoose.model('Post').estimatedDocumentCount();
     console.log(postCount);
 
   }catch(err){
@@ -75,7 +75,7 @@ app.get("/home",async (req,res)=>{
 
   if(req.isAuthenticated()){
     pageNo = 1
-    postCount = await mongoose.model('Post').countDocuments({}).lean();
+    postCount = await mongoose.model('Post').estimatedDocumentCount();
     totPages = Math.ceil(postCount/pageSize);
     skipAmount = (pageNo - 1) * pageSize;
     posts = await mongoose.model('Post').find({}).sort({_id : -1}).skip(skipAmount).limit(pageSize).exec();
@@ -107,7 +107,7 @@ app.get("/register",(req,res)=>{
 app.get("/home/:pageNo",async function(req,res){
   if(req.isAuthenticated()){
     pageNo = req.params.pageNo;
-    postCount = await mongoose.model('Post').countDocuments({}).lean();
+    postCount = await mongoose.model('Post').estimatedDocumentCount();
     totPages = Math.ceil(postCount/pageSize);
     skipAmount = (pageNo - 1) * pageSize;
     const posts = await mongoose.model('Post').find({}).sort({_id : -1}).skip(skipAmount).limit(pageSize).exec();
