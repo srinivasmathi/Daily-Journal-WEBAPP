@@ -1,3 +1,4 @@
+require('dotenv').config()
 
 const express = require('express')
 const app = express()
@@ -7,7 +8,6 @@ const mongoose = require('mongoose')
 const _ = require('lodash')
 const passport = require('passport');
 
-require('dotenv').config()
 require('./auth');
 const localAuthRouter = require("./local-auth");
 

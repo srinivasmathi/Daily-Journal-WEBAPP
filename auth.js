@@ -1,7 +1,8 @@
+require('dotenv').config();
+
 const passport = require('passport');
 
 const googleStrategy = require('passport-google-oauth20').Strategy;
-require('dotenv').config();
 
 const mongoose = require('mongoose');
 const findOrCreate = require('mongoose-findorcreate');
@@ -9,6 +10,7 @@ const passportLocalMongoose = require('passport-local-mongoose');
 const { reduceRight } = require('lodash');
 
 async function main(){
+    console.log(process.env.connection_string);
     await mongoose.connect(process.env.connection_string);
 }
 main().catch(err=>console.log(err));
