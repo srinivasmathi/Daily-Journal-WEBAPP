@@ -74,12 +74,16 @@ const aboutContent = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. M
 app.get("/home",async (req,res)=>{
 
   if(req.isAuthenticated()){
-    pageNo = 1
-    postCount = await mongoose.model('Post').countDocuments({});
-    totPages = Math.ceil(postCount/pageSize);
-    skipAmount = (pageNo - 1) * pageSize;
-    posts = await mongoose.model('Post').find({}).sort({_id : -1}).skip(skipAmount).limit(pageSize).exec();
-    res.render("home",{list:posts,pageNo:pageNo,totPages:totPages})
+    try{
+      pageNo = 1
+      postCount = await mongoose.model('Post').countDocuments({});
+      totPages = Math.ceil(postCount/pageSize);
+      skipAmount = (pageNo - 1) * pageSize;
+      posts = await mongoose.model('Post').find({}).sort({_id : -1}).skip(skipAmount).limit(pageSize).exec();
+      res.render("home",{list:posts,pageNo:pageNo,totPages:totPages})
+    }catch(err){
+      console.log("error : "+err);
+    }
   }else{
     res.redirect('/');
   }
@@ -105,13 +109,19 @@ app.get("/register",(req,res)=>{
 
 
 app.get("/home/:pageNo",async function(req,res){
+
   if(req.isAuthenticated()){
-    pageNo = req.params.pageNo;
-    postCount = await mongoose.model('Post').countDocuments({});
-    totPages = Math.ceil(postCount/pageSize);
-    skipAmount = (pageNo - 1) * pageSize;
-    const posts = await mongoose.model('Post').find({}).sort({_id : -1}).skip(skipAmount).limit(pageSize).exec();
-    res.render('home',{list:posts,pageNo:pageNo,totPages:totPages})
+
+    try{
+      pageNo = req.params.pageNo;
+      postCount = await mongoose.model('Post').countDocuments({});
+      totPages = Math.ceil(postCount/pageSize);
+      skipAmount = (pageNo - 1) * pageSize;
+      const posts = await mongoose.model('Post').find({}).sort({_id : -1}).skip(skipAmount).limit(pageSize).exec();
+      res.render('home',{list:posts,pageNo:pageNo,totPages:totPages})
+    }catch(err){
+      console.log("error : "+err);
+    }
 
   }else{
     res.redirect("/");
