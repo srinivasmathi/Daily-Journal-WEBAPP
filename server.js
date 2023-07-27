@@ -20,6 +20,8 @@ app.use(session({
   resave : false,
   saveUninitialized : false,
   cookie : {
+    secure: true,
+    rolling : true,
     maxAge : 300000
   }
 }))
