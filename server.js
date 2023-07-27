@@ -71,7 +71,7 @@ async function fetchPostCountWithRetries(retries = 5) {
 async function start(){
 
     try{
-      
+
     await mongoose.connect(process.env.connection_string);
     console.log("connected to database successfully");
 
@@ -106,15 +106,17 @@ app.get("/home",async function(req,res){
 
     try{
       pageNo = 1
-      postCount = await  fetchPostCountWithRetries();
+      postCount = await fetchPostCountWithRetries();
       totPages = Math.ceil(postCount/pageSize);
       skipAmount = (pageNo - 1) * pageSize;
       posts = await mongoose.model('Post').find({}).sort({_id : -1}).skip(skipAmount).limit(pageSize).exec();
     res.render("home",{list:posts,pageNo:pageNo,totPages:totPages})
     }
     catch(err){
+      console.log(err);
       res.redirect('/home');
     }
+
   }else{
     res.redirect('/');
   }
