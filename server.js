@@ -20,8 +20,6 @@ app.use(session({
   resave : false,
   saveUninitialized : false,
   cookie : {
-    secure: true,
-    rolling : true,
     maxAge : 300000
   }
 }))
@@ -50,6 +48,7 @@ async function start(){
   try {
 
     await mongoose.connect(process.env.connection_string);
+    console.log("database connection successful");
     await mongoose.model("Post", postSchema);
     postCount = await mongoose.model('Post').countDocuments({});
     console.log(postCount);
