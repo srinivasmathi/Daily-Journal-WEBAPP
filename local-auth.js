@@ -40,7 +40,7 @@ router.post("/",(req,res) => {
       errorMessage = "Empty fields!";
       res.render('login',{errorMessage});
     }else{
-      
+
       const user = new User({
         email :req.body.email,
         password:req.body.password
@@ -63,7 +63,7 @@ router.post("/",(req,res) => {
          }
       }catch(err){
           console.log(err);
-          const errorMessage = "Incorrect username or password";
+          const errorMessage = "Login Failed";
           res.render("login",{ errorMessage });
       }
        
