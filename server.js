@@ -43,21 +43,46 @@ let skipAmount = 0;
 //connection to the database
 start().catch(err => console.log(err));
 
+async function fetchPostCountWithRetries(retries = 5) {
+  try {
+
+    const count = await mongoose.model('Post').countDocuments({});
+    return count;
+
+  } catch (err) {
+
+    console.error('Error fetching post count:', err);
+
+    if (retries > 0) {
+
+      console.log(`Retrying (${retries} attempts left)...`);
+      await new Promise(resolve => setTimeout(resolve, 2000)); // Wait for 2 seconds before retrying
+      return fetchPostCountWithRetries(retries - 1);
+
+    } else {
+
+      console.console('Maximum retries reached. Exiting...');
+
+    }
+  }
+}
+
+
 async function start(){
 
-  try{
-    await mongoose.connect(process.env.connection_string)
+    try{
+      
+    await mongoose.connect(process.env.connection_string);
     console.log("connected to database successfully");
 
-    mongoose.model("Post", postSchema);
+    await mongoose.model("Post", postSchema);
 
-    postCount = await mongoose.model('Post').countDocuments({});
+    postCount = await fetchPostCountWithRetries();
 
     console.log(postCount);
-  }catch (err){
-    console.log("error : "+err);
-    console.log("retrying in 2 seconds");
-    setTimeout(start,2000);
+
+  }catch(err){
+    console.log(err);
   }
 }
 
@@ -81,7 +106,7 @@ app.get("/home",async function(req,res){
 
     try{
       pageNo = 1
-      postCount = await mongoose.model('Post').countDocuments({});
+      postCount = await  fetchPostCountWithRetries();
       totPages = Math.ceil(postCount/pageSize);
       skipAmount = (pageNo - 1) * pageSize;
       posts = await mongoose.model('Post').find({}).sort({_id : -1}).skip(skipAmount).limit(pageSize).exec();
@@ -117,7 +142,7 @@ app.get("/register",(req,res)=>{
 app.get("/home/:pageNo",async function(req,res){
   if(req.isAuthenticated()){
     pageNo = req.params.pageNo;
-    postCount = await mongoose.model('Post').countDocuments({});
+    postCount = await  fetchPostCountWithRetries();
     totPages = Math.ceil(postCount/pageSize);
     skipAmount = (pageNo - 1) * pageSize;
     const posts = await mongoose.model('Post').find({}).sort({_id : -1}).skip(skipAmount).limit(pageSize).exec();
