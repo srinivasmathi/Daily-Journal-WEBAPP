@@ -47,8 +47,8 @@ async function start(){
 
   try {
 
-    mongoose.connect(process.env.connection_string).catch((err) =>{
-      setTimeout(start,2000);
+    await mongoose.connect(process.env.connection_string).catch((err)=>{
+      etTimeout(start,2000);
     }
     );
     await mongoose.model("Post", postSchema);
