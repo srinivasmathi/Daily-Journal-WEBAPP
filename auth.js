@@ -10,7 +10,6 @@ const passportLocalMongoose = require('passport-local-mongoose');
 const { reduceRight } = require('lodash');
 
 async function main(){
-    console.log(process.env.connection_string);
     await mongoose.connect(process.env.connection_string);
 }
 main().catch(err=>console.log(err));
