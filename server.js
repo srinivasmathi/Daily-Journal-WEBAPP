@@ -45,13 +45,20 @@ start().catch(err => console.log(err));
 
 async function start(){
 
-    await mongoose.connect(process.env.connection_string).catch((err)=>{
-      setTimeout(start,2000);
-    }
-    );
-    await mongoose.model("Post", postSchema);
+  try{
+    await mongoose.connect(process.env.connection_string)
+    console.log("connected to database successfully");
+
+    mongoose.model("Post", postSchema);
+
     postCount = await mongoose.model('Post').countDocuments({});
+
     console.log(postCount);
+  }catch (err){
+    console.log("error : "+err);
+    console.log("retrying in 2 seconds");
+    setTimeout(start,2000);
+  }
 }
 
 
